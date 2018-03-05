@@ -68,7 +68,7 @@ module "nat-gateway" {
   local_cmd_create = "sleep 30"
 
   access_config = [{
-    nat_ip = "${google_compute_address.default.address}"
+    nat_ip = "${google_compute_address.external.address}"
   }]
 }
 
@@ -94,6 +94,10 @@ resource "google_compute_firewall" "nat-gateway" {
   target_tags = ["${compact(concat(list("${var.name}nat-${var.zone == "" ? lookup(var.region_params["${var.region}"], "zone") : var.zone}"), var.tags))}"]
 }
 
-resource "google_compute_address" "default" {
+data "google_compute_address" "default" {
   name = "${var.name}nat-${var.zone == "" ? lookup(var.region_params["${var.region}"], "zone") : var.zone}"
+}
+
+resource "google_compute_address" "external" {
+  name = "${var.external_ip == "" ? data.google_compute_address.default.name : var.external_ip}"
 }

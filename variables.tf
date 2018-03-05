@@ -69,6 +69,11 @@ variable ip {
   default     = ""
 }
 
+variable external_ip {
+  description = "Name of the reserved static external IP address to use. Will be created if it doesn't exist or is not specified."
+  default     = ""
+}
+
 variable squid_enabled {
   description = "Enable squid3 proxy on port 3128."
   default     = "false"
